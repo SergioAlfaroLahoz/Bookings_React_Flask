@@ -1,1 +1,30 @@
-flask_server/mqtt_config.yaml
+.vscode
+
+# Flask
+flask_API/mqtt_config.yaml
+flask_API/venv
+flask_API/db.json
+flask_API/__pycache__
+
+# React 
+# dependencies
+room_scheduler/node_modules/
+room_scheduler/.pnp
+room_scheduler/pnp.js
+
+# testing
+room_scheduler/coverage
+
+# production
+room_scheduler/build
+
+# misc
+room_scheduler/DS_Store
+room_scheduler/env.local
+room_scheduler/env.development.local
+room_scheduler/env.test.local
+room_scheduler/env.production.local
+
+room_scheduler/npm-debug.log*
+room_scheduler/yarn-debug.log*
+room_scheduler/yarn-error.log*

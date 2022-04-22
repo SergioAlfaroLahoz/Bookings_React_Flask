@@ -1,0 +1,79 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+}
+
+body {
+  background: #f2f2f2;
+  font-family: "Roboto", Arial;
+  border-top: 30px solid #303f9f;
+}
+
+.FormHolder {
+  position: absolute;
+  background-color: #f2f2f2;
+  top: 10vh;
+  left: 30vw;
+  margin: auto;
+  width: 40vw;
+  padding: 40px;
+  background: #ffffff;
+  -webkit-box-shadow: 0px 0px 3px grey;
+          box-shadow: 0px 0px 3px grey;
+}
+
+.FormHolder h3 {
+  position: relative;
+  text-align: center;
+  width: 100%;
+  margin: 5px;
+  margin-top: 0px;
+  font-size: 20px;
+}
+
+.FormHolder .DatePicker {
+  position: relative;
+  width: auto;
+  left: 50%;
+  -webkit-transform: translateX(-50%);
+          transform: translateX(-50%);
+  margin: 5px;
+  font-size: 20px;
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.FormHolder select {
+  position: relative;
+  background-color: #fff;
+  width: 30%;
+  margin: 5px;
+  font-size: 20px;
+  text-align: center;
+  margin-bottom: 30px;
+  left: 50%;
+  -webkit-transform: translateX(-50%);
+          transform: translateX(-50%);
+}
+
+.FormHolder .BtnBook {
+  background: #303f9f;
+  border-radius: 1px;
+  border: 2px solid #f2f2f2;
+  color: #f2f2f2;
+  cursor: pointer;
+  display: block;
+  padding: 15px;
+  width: 100%;
+  font-size: 20px;
+  -webkit-transition: all .3s ease;
+  transition: all .3s ease;
+}
+
+.FormHolder .BtnBook:hover {
+  background: #1976D2;
+}
+/*# sourceMappingURL=form.css.map */
