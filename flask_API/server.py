@@ -6,14 +6,14 @@ from datetime import datetime
 import json
 import os
 
-import mqtt_client
+# import mqtt_client
 
 app = Flask(__name__)
 
 cors = CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
 
-mqttclient = mqtt_client.MQTTClient("FlaskServer", clean_session=True)
+# mqttclient = mqtt_client.MQTTClient("FlaskServer", clean_session=True)
 
 # mqttclient2 = mqtt_client.MQTTClient("FlaskServer2", clean_session=True)
 
@@ -32,9 +32,9 @@ else:
     }
 
 # Members API route
-@app.route("/members")
+@app.route("/rooms")
 def members():
-    return {"members": ["Member1", "Member2", "Member3"]}
+    return {"room1": "available", "room2": "available", "room3": "booked"}
 
 @app.route("/add", methods=["POST"], strict_slashes=False)
 @cross_origin() # allow all origins all methods.

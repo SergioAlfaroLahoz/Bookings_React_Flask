@@ -13,18 +13,7 @@ export default function BookingForm() {
     const [startDate, setStartDate] = useState(new Date())
     const [endDate, setEndDate] = useState(new Date())
     const [room, setRoom] = useState('room1')
-    // const [data, setData] = useState([{}])
-  
-    // useEffect(() => {
-    // fetch("/members").then(
-    //     res => res.json()
-    // ).then(
-    //     data => {
-    //     setData(data)
-    //     console.log(data)
-    //     }
-    // )
-    // }, [])
+    const [rooms, setRooms] = useState()
 
     // useEffect(() => {
     //   APIService.InsertArticle({title,body})
@@ -33,13 +22,38 @@ export default function BookingForm() {
     // }, [title && body])
 
     const sendBooking = () => {
-    APIService.InsertArticle({startDate, endDate, room})
-    .then((response) => console.log(response))
-    .catch(error => console.log('error',error))
+        APIService.InsertArticle({startDate, endDate, room})
+        .then((response) => console.log(response))
+        .catch(error => console.log('error',error))
     }
 
     const setRoomValue = () => {
-    setRoom(document.getElementById("roomSelector").value)
+        setRoom(document.getElementById("roomSelector").value)
+    }
+
+    useEffect(() => {
+        fetch("/rooms").then(
+            res => res.json()
+        ).then(
+            rooms => {
+            setRooms(rooms)
+            }
+        )
+    }, [startDate || endDate])
+
+    useEffect(() => {
+        roomsList()
+    }, [rooms])
+
+    const roomsList = () => {
+        const room1 = <option value="room1">room 1</option>
+        const room2 = <option value="room2">room 2</option>
+        const room3 = <option value="room3">room 3</option>
+        return (<select id="roomSelector" onChange={() => setRoomValue()}>
+                    {room1}
+                    {room2}
+                    {room3}
+                </select>)
     }
 
     // const insertArticle = () => {
@@ -55,11 +69,7 @@ export default function BookingForm() {
             {/* <p>Actual date and Time: {JSON.stringify(startDate)}</p>
             <p>Last date and Time: {JSON.stringify(endDate)}</p> */}
             {/* <p>{data.members}</p> */}
-            <select id="roomSelector" onChange={() => setRoomValue()}>
-                <option value="room1">room 1</option>
-                <option value="room2">room 2</option>
-                <option value="room3">room 3</option>
-            </select>
+            {roomsList()}
             {/* <p>{room}</p> */}
             <button className="BtnBook" onClick={sendBooking}>Book room</button>
         </div> 
