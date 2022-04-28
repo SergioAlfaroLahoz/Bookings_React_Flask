@@ -11,15 +11,15 @@ export default function Rooms() {
     const [colorRoom2, setColorR2] = useState([{}])
     const [colorRoom3, setColorR3] = useState([{}])
 
-    useEffect(() => {
-    fetch("/rooms").then(
-        res => res.json()
-    ).then(
-        rooms => {
-        setRooms(rooms)
-        }
-    )
-    }, [])
+    // useEffect(() => {
+    // fetch("/rooms").then(
+    //     res => res.json()
+    // ).then(
+    //     rooms => {
+    //     setRooms(rooms)
+    //     }
+    // )
+    // }, [])
 
     useEffect(() => {
         if(rooms['room1']=="available"){

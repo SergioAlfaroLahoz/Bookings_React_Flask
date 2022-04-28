@@ -3,6 +3,7 @@ from flask import Flask, request
 from flask_cors import CORS, cross_origin
 
 from datetime import datetime
+import time
 import json
 import os
 
@@ -32,9 +33,27 @@ else:
     }
 
 # Members API route
-@app.route("/rooms")
-def members():
-    return {"room1": "available", "room2": "available", "room3": "booked"}
+@app.route("/rooms", methods=["GET"])
+def available_rooms():
+    startString = request.args.get('startDate')
+    endString = request.args.get('endDate')
+    startDate = startString.replace('"', '')
+    endDate = endString.replace('"', '')
+    JSONStartDate, JSONEndDate = transformDate(startDate, endDate)
+
+    room1Flag = False
+    room2Flag = False
+    room3Flag = False
+    for book in JSONdb['bookings']:
+        dbRoom = book['room']
+        dbSD = book['startDate']
+        dbED = book['endDate']
+        JSONdbDateStart = datetime(int(dbSD['year']), int(dbSD['month']), int(dbSD['day']), int(dbSD['hour']), int(dbSD['minute']))
+        JSONdbDateEnd = datetime(int(dbED['year']), int(dbED['month']), int(dbED['day']), int(dbED['hour']), int(dbED['minute']))
+        if(JSONdbDateStart<JSONStartDate<JSONdbDateEnd):
+            None
+
+    return {"room1": "booked", "room2": "available", "room3": "booked"}
 
 @app.route("/add", methods=["POST"], strict_slashes=False)
 @cross_origin() # allow all origins all methods.
@@ -48,44 +67,31 @@ def add_articles():
     # print(endDate)
     # print(room)
 
-    startYear = startDate.split('T')[0].split('-')[0]
-    startMonth = startDate.split('T')[0].split('-')[1]
-    startDay = startDate.split('T')[0].split('-')[2]
-    startHour = str(int(startDate.split('T')[1].split(':', 2)[0])+2)
-    startMinute = startDate.split('T')[1].split(':', 2)[1]
-    endYear = endDate.split('T')[0].split('-')[0]
-    endMonth = endDate.split('T')[0].split('-')[1]
-    endDay = endDate.split('T')[0].split('-')[2]
-    endHour = str(int(endDate.split('T')[1].split(':', 2)[0])+2)
-    endMinute = endDate.split('T')[1].split(':', 2)[1]
+    JSONStartDate, JSONEndDate = transformDate(startDate, endDate)
 
     JSONitem = {
         'startDate': {
-            'year': startYear,
-            'month': startMonth,
-            'day': startDay,
-            'hour': startHour,
-            'minute': startMinute
+            'year': JSONStartDate.year,
+            'month': JSONStartDate.month,
+            'day': JSONStartDate.day,
+            'hour': JSONStartDate.hour,
+            'minute': JSONStartDate.minute
         },
         'endDate': {
-            'year': endYear,
-            'month': endMonth,
-            'day': endDay,
-            'hour': endHour,
-            'minute': endMinute
+            'year': JSONEndDate.year,
+            'month': JSONEndDate.month,
+            'day': JSONEndDate.day,
+            'hour': JSONEndDate.hour,
+            'minute': JSONEndDate.minute
         },
         'room': room
     }
-
-    # print(datetime.now())
-
-    JSONitemDate = datetime(int(startYear), int(startMonth), int(startDay), int(startHour), int(startMinute))
 
     saved = False
     for bookinglistnum in range(len(JSONdb["bookings"])):
         startDateItem = JSONdb["bookings"][bookinglistnum]["startDate"]
         JSONdbDate = datetime(int(startDateItem['year']), int(startDateItem['month']), int(startDateItem['day']), int(startDateItem['hour']), int(startDateItem['minute']))
-        if (JSONitemDate<JSONdbDate):  
+        if (JSONStartDate<JSONdbDate):  
             JSONdb["bookings"].insert(bookinglistnum, JSONitem)
             saved = True
             break 
@@ -100,6 +106,24 @@ def add_articles():
         # mqttclient2.sendMssg("/input", "Message from 2nd client")
 
     return "OK"
+
+def transformDate(startString, endString):
+    startYear = startString.split('T')[0].split('-')[0]
+    startMonth = startString.split('T')[0].split('-')[1]
+    startDay = startString.split('T')[0].split('-')[2]
+    startHour = str(int(startString.split('T')[1].split(':', 2)[0])+2)
+    startMinute = startString.split('T')[1].split(':', 2)[1]
+    endYear = endString.split('T')[0].split('-')[0]
+    endMonth = endString.split('T')[0].split('-')[1]
+    endDay = endString.split('T')[0].split('-')[2]
+    endHour = str(int(endString.split('T')[1].split(':', 2)[0])+2)
+    endMinute = endString.split('T')[1].split(':', 2)[1]
+
+    # print(datetime.now())
+    JSONStartDate = datetime(int(startYear), int(startMonth), int(startDay), int(startHour), int(startMinute))
+    JSONEndDate = datetime(int(endYear), int(endMonth), int(endDay), int(endHour), int(endMinute))
+
+    return JSONStartDate, JSONEndDate
 
 if __name__ == "__main__":
     app.run(debug=True)
