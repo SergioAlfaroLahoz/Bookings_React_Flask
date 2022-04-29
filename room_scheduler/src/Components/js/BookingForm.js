@@ -12,9 +12,8 @@ export default function BookingForm() {
 
     const [startDate, setStartDate] = useState(new Date())
     const [endDate, setEndDate] = useState(new Date())
-    const [room, setRoom] = useState('room1')
     const [rooms, setRooms] = useState()
-    const [reactRooms, setReactRooms] = useState(<select id="roomSelector" onChange={() => setRoomValue()}></select>)
+    const [reactRooms, setReactRooms] = useState(<select id="roomSelector"></select>)
 
     // useEffect(() => {
     //   APIService.InsertArticle({title,body})
@@ -23,13 +22,11 @@ export default function BookingForm() {
     // }, [title && body])
 
     const sendBooking = () => { //TODO add fields check to send data
+        var room = document.getElementById("roomSelector").value
+        console.log(room)
         APIService.InsertArticle({startDate, endDate, room})
         .then((response) => console.log(response))
         .catch(error => console.log('error',error))
-    }
-
-    const setRoomValue = () => {
-        setRoom(document.getElementById("roomSelector").value)
     }
 
     useEffect(() => {
@@ -51,19 +48,19 @@ export default function BookingForm() {
         var room2 = null
         var room3 = null
         try{
-            if(rooms['room1']=='available'){
+            if(rooms['room1']==='available'){
                 room1 =<option value="room1">room 1</option>
             }
-            if(rooms['room2']=='available'){
+            if(rooms['room2']==='available'){
                 room2 =<option value="room2">room 2</option>
             }
-            if(rooms['room3']=='available'){
+            if(rooms['room3']==='available'){
                 room3 =<option value="room3">room 3</option>
             }
         }catch{
 
         }
-        setReactRooms(<select id="roomSelector" onChange={() => setRoomValue()}>{room1}{room2}{room3}</select>)
+        setReactRooms(<select id="roomSelector">{room1}{room2}{room3}</select>)
     }, [rooms])
 
     // const insertArticle = () => {
