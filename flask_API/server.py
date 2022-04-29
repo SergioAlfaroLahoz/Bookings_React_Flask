@@ -1,10 +1,15 @@
 # FLASK SERVER
 from flask import Flask, request
 from flask_cors import CORS, cross_origin
+from flask_apscheduler import APScheduler
 
 from datetime import datetime
 import json
 import os
+import time
+import atexit
+
+# from apscheduler.schedulers.background import BackgroundScheduler
 
 import mqtt_client
 
@@ -30,6 +35,22 @@ else:
     JSONdb = {
         'bookings': []
     }
+
+
+def check_bookings():
+    print('Hello')
+    # for bookinglistnum in range(len(JSONdb["bookings"])):
+        # startDateItem = JSONdb["bookings"][bookinglistnum]["startDate"]
+        # endDateItem = JSONdb["bookings"][bookinglistnum]["endDate"]
+        # now = datetime()
+        # print(now)
+        # actualDate = datetime(int(startYear), int(startMonth), int(startDay), int(startHour), int(startMinute))
+        # print(startDateItem)
+        # print(actualDate)
+        # if (startDateItem<actualDate<endDateItem): 
+        #     bookedRoom =  JSONdb["bookings"][bookinglistnum]["room"]
+        #     print("Booked room %s", bookedRoom)
+
 
 # Members API route
 @app.route("/members")
@@ -101,5 +122,10 @@ def add_articles():
 
     return "OK"
 
+
 if __name__ == "__main__":
-    app.run(debug=True)
+    scheduler = APScheduler()
+    scheduler.add_job(id = 'Check bookings', func = check_bookings, trigger = 'interval', seconds = 10)
+    scheduler.start()
+    app.run(debug=True, use_reloader=False)
+    atexit.register(lambda: scheduler.shutdown())
