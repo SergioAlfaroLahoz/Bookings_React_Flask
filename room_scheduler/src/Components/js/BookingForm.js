@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react"
 import DatePicker from "react-datepicker"
+import { Link } from "react-router-dom"
 
 import APIService from './APIService'
 
@@ -69,18 +70,21 @@ export default function BookingForm() {
     // }
 
     return (
-        <div className="FormHolder">
-            <h3>Starting date and hour</h3>
-            <DatePicker className="DatePicker" selected={startDate} onChange={(date) => setStartDate(date)} showTimeSelect dateFormat="Pp" timeIntervals={15}/>
-            <h3>Ending date and hour</h3>
-            <DatePicker className="DatePicker" selected={endDate} onChange={(date) => setEndDate(date)} showTimeSelect dateFormat="Pp" timeIntervals={15}/>
-            {/* <p>Actual date and Time: {JSON.stringify(startDate)}</p>
-            <p>Last date and Time: {JSON.stringify(endDate)}</p> */}
-            {/* <p>{data.members}</p> */}
-            {reactRooms}
-            {/* <p>{room}</p> */}
-            <button className="BtnBook" onClick={sendBooking}>Book room</button>
-        </div> 
+        <div>
+            <div className="FormHolder">
+                <h3>Starting date and hour</h3>
+                <DatePicker className="DatePicker" selected={startDate} onChange={(date) => setStartDate(date)} showTimeSelect dateFormat="Pp" timeIntervals={15}/>
+                <h3>Ending date and hour</h3>
+                <DatePicker className="DatePicker" selected={endDate} onChange={(date) => setEndDate(date)} showTimeSelect dateFormat="Pp" timeIntervals={15}/>
+                {/* <p>Actual date and Time: {JSON.stringify(startDate)}</p>
+                <p>Last date and Time: {JSON.stringify(endDate)}</p> */}
+                {/* <p>{data.members}</p> */}
+                {reactRooms}
+                {/* <p>{room}</p> */}
+                <button className="BtnBook" onClick={sendBooking}>Book room</button>
+            </div> 
+            <Link className="BookingsLink" to="/rooms">Rooms</Link>
+        </div>
     )
 
 }

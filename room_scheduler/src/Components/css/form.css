@@ -76,4 +76,26 @@ body {
 .FormHolder .BtnBook:hover {
   background: #1976D2;
 }
+
+.roomsLink {
+  position: absolute;
+  margin: auto;
+  top: 10vh;
+  text-align: center;
+  width: 150px;
+  height: 40px;
+  left: 4vw;
+  color: #fff;
+  background-color: #303f9f;
+  font-size: 25px;
+  -webkit-text-decoration-line: none;
+          text-decoration-line: none;
+  border: 5px solid #303f9f;
+  border-radius: 25px;
+}
+
+.roomsLink:hover {
+  color: #303f9f;
+  background-color: #fff;
+}
 /*# sourceMappingURL=form.css.map */

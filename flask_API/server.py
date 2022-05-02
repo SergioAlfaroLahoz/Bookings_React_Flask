@@ -10,8 +10,6 @@ import os
 import time
 import atexit
 
-# from apscheduler.schedulers.background import BackgroundScheduler
-
 # import mqtt_client
 
 app = Flask(__name__)
@@ -46,10 +44,11 @@ rooms = {
 
 
 def check_bookings():
-    print('Timer')
     rooms['room1'] = "available"
     rooms['room2'] = "available"
     rooms['room3'] = "available"
+    count = 0
+    changed = False
     for book in JSONdb['bookings']:
         dbSD = book['startDate']
         dbED = book['endDate']
@@ -59,21 +58,19 @@ def check_bookings():
         if (JSONdbDateStart<=now<=JSONdbDateEnd): 
             bookedRoom = book["room"]
             rooms[bookedRoom] = "booked"
-    # for bookinglistnum in range(len(JSONdb["bookings"])):
-    #     startDateItem = JSONdb["bookings"][bookinglistnum]["startDate"]
-    #     endDateItem = JSONdb["bookings"][bookinglistnum]["endDate"]
-    #     now = datetime()
-    #     print(now)
-    #     actualDate = datetime(int(startYear), int(startMonth), int(startDay), int(startHour), int(startMinute))
-    #     print(startDateItem)
-    #     print(actualDate)
-    #     if (startDateItem<actualDate<endDateItem): 
-    #         bookedRoom =  JSONdb["bookings"][bookinglistnum]["room"]
-    #         print("Booked room %s", bookedRoom)
+        if (JSONdbDateEnd<now):
+            JSONdb['bookings'].pop(count)
+            changed = True
+        count += 1
+    if changed:
+        with open('db.json', 'w') as outfile:
+            json.dump(JSONdb, outfile) 
+ 
 
 
 @app.route("/now")
 def available_rooms():
+    check_bookings()
     return rooms
 
 # Booking rooms API route
@@ -175,7 +172,7 @@ def transformDate(startString, endString):
 if __name__ == "__main__":
     check_bookings()
     scheduler = APScheduler()
-    scheduler.add_job(id = 'Check bookings', func = check_bookings, trigger = 'interval', seconds = 60)
+    scheduler.add_job(id = 'Check bookings', func = check_bookings, trigger = 'interval', seconds = 15)
     scheduler.start()
     app.run(debug=True, use_reloader=False)
     atexit.register(lambda: scheduler.shutdown())

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react"
+import { Link } from "react-router-dom"
 
 // Styles
 import '../css/rooms.css'
@@ -10,6 +11,13 @@ export default function Rooms() {
     const [colorRoom1, setColorR1] = useState('#30c07d')
     const [colorRoom2, setColorR2] = useState('#30c07d')
     const [colorRoom3, setColorR3] = useState('#30c07d')
+    const [date, setDate] = useState(new Date())
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+          setDate(new Date)
+        }, 1000);
+    }, []);
 
     useEffect(() => {
     fetch("/now").then(
@@ -41,11 +49,15 @@ export default function Rooms() {
     }, [rooms])
 
     return (
-        <div className="RoomsHolder">
-            <div className="room" style={{backgroundColor: colorRoom1}}><h3>Room1</h3></div>
-            <div className="room" style={{backgroundColor: colorRoom2}}><h3>Room2</h3></div>
-            <div className="room" style={{backgroundColor: colorRoom3}}><h3>Room3</h3></div>
-        </div> 
+        <div>
+            <h2 className="Clock">{date.toLocaleString()}</h2>
+            <div className="RoomsHolder">
+                <div className="room" style={{backgroundColor: colorRoom1}}><h3>Room1</h3></div>
+                <div className="room" style={{backgroundColor: colorRoom2}}><h3>Room2</h3></div>
+                <div className="room" style={{backgroundColor: colorRoom3}}><h3>Room3</h3></div>
+            </div> 
+            <Link className="BookingsLink" to="/">Bookings</Link>
+        </div>
     )
 
 }

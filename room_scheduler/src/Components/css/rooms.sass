@@ -14,13 +14,13 @@ body
 
 .RoomsHolder
     position: absolute
-    width: 50vw
-    height: 25vh
-    top: 70vh
-    left: 25vw
+    width: 80vw
+    height: 40vh
+    top: 30vh
+    left: 10vw
     display: grid
     grid-template-columns: 1fr 1fr 1fr
-    grid-gap: 60px
+    grid-gap: 100px
     padding: 10px
 
     .room
@@ -36,6 +36,37 @@ body
             width: 100%
             margin-top: 30%
             font-size: 20px
+
+.BookingsLink
+    position: absolute
+    margin: auto
+    top: 10vh
+    text-align: center
+    width: 150px
+    height: 40px
+    left: 4vw
+    color: #fff
+    background-color: $primary    
+    font-size: 25px
+    text-decoration-line: none
+    border: 5px solid $primary
+    border-radius: 25px
+
+    &:hover
+        color: $primary
+        background-color: #fff
+
+.Clock
+    position: absolute
+    text-align: center
+    font-size: 35px
+    color: $primary
+    top: 10vh
+    width: 20vw
+    left: 40vw
+    background: #ffffff
+    box-shadow: 0px 0px 3px grey
+
 
 
 
