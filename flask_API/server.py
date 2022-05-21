@@ -42,11 +42,26 @@ rooms = {
     "room3": "available"
 }
 
+users = {
+    "room1": "none",
+    "room2": "none",
+    "room3": "none"
+}
+
+temperature = {
+    "room1": "22",
+    "room2": "23",
+    "room3": "24"   
+}
+
 
 def check_bookings():
     rooms['room1'] = "available"
     rooms['room2'] = "available"
     rooms['room3'] = "available"
+    users['room1'] = "none"
+    users['room2'] = "none"
+    users['room3'] = "none"
     count = 0
     changed = False
     for book in JSONdb['bookings']:
@@ -58,6 +73,8 @@ def check_bookings():
         if (JSONdbDateStart<=now<=JSONdbDateEnd): 
             bookedRoom = book["room"]
             rooms[bookedRoom] = "booked"
+            users[bookedRoom] = book['user']
+            #TODO send user and room via MQTT
         if (JSONdbDateEnd<now):
             JSONdb['bookings'].pop(count)
             changed = True
@@ -72,6 +89,14 @@ def check_bookings():
 def available_rooms():
     check_bookings()
     return rooms
+
+@app.route("/users")
+def presence_users():
+    return users
+
+@app.route("/temperature")
+def get_temperature():
+    return temperature
 
 # Booking rooms API route
 @app.route("/rooms", methods=["GET"])
@@ -104,10 +129,7 @@ def add_articles():
     startDate = request.json['startDate']
     endDate = request.json['endDate']
     room = request.json['room']
-
-    # print(startDate)
-    # print(endDate)
-    # print(room)
+    user = request.json['user']
 
     JSONStartDate, JSONEndDate = transformDate(startDate, endDate)
 
@@ -126,7 +148,8 @@ def add_articles():
             'hour': JSONEndDate.hour,
             'minute': JSONEndDate.minute
         },
-        'room': room
+        'room': room,
+        'user': user
     }
 
     print(JSONitem)

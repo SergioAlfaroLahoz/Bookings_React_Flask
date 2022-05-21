@@ -38,8 +38,15 @@ body {
   position: relative;
   text-align: center;
   width: 100%;
-  margin-top: 30%;
+  margin-top: 5%;
   font-size: 20px;
+}
+
+.RoomsHolder .room img {
+  display: block;
+  width: 50%;
+  margin: auto;
+  margin-top: 5%;
 }
 
 .BookingsLink {
