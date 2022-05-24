@@ -15,7 +15,6 @@ port = configMQTTFile["port"]
 # client_id     = "PCSergio2"
 user_name = configMQTTFile["user_name"]
 password = configMQTTFile["password"]
-
 base_topic = configMQTTFile["base_topic"]
 
 def on_connect (client, userdata, flags, rc):
@@ -25,7 +24,7 @@ def on_connect (client, userdata, flags, rc):
     # With Paho, always subscribe at on_connect (if you want to
     # subscribe) to ensure you resubscribe if connection is
     # lost.
-    # client.subscribe("some/topic")
+    client.subscribe("sergioiottest/#")
 
     if rc == 0:
         client.connected_flag = True
@@ -46,7 +45,7 @@ class MQTTClient():
     def __init__(self, client_id, clean_session):
         # Define clientId, host, user and password
         self.client = mqtt.Client(client_id = client_id, clean_session = clean_session)
-        self.client.username_pw_set(user_name, password)
+        # self.client.username_pw_set(user_name, password)
 
         self.client.on_connect = on_connect
         self.client.on_message = on_message
@@ -59,7 +58,8 @@ class MQTTClient():
             time.sleep (1)
 
     def sendMssg(self, subtopic, message):
-        topic = base_topic + subtopic
+        # topic = base_topic + subtopic
+        topic = subtopic
         ret = self.client.publish(topic, message)
         self.client.loop()
 

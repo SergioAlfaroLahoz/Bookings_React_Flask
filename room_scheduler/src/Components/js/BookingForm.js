@@ -16,7 +16,7 @@ export default function BookingForm() {
     const [rooms, setRooms] = useState()
     const [reactRooms, setReactRooms] = useState(<select id="roomSelector"></select>)
 
-    const sendBooking = () => { //TODO add fields check to send data
+    const sendBooking = () => {
         var room = document.getElementById("roomSelector").value
         var user = document.getElementById("userSelector").value
         APIService.InsertArticle({startDate, endDate, room, user})

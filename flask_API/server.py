@@ -10,14 +10,14 @@ import os
 import time
 import atexit
 
-# import mqtt_client
+import mqtt_client
 
 app = Flask(__name__)
 
 cors = CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
 
-# mqttclient = mqtt_client.MQTTClient("FlaskServer", clean_session=True)
+mqttclient = mqtt_client.MQTTClient("FlaskServer1", clean_session=True)
 
 # mqttclient2 = mqtt_client.MQTTClient("FlaskServer2", clean_session=True)
 
@@ -75,6 +75,7 @@ def check_bookings():
             rooms[bookedRoom] = "booked"
             users[bookedRoom] = book['user']
             #TODO send user and room via MQTT
+            mqttclient.sendMssg("/room1", bookedRoom)
         if (JSONdbDateEnd<now):
             JSONdb['bookings'].pop(count)
             changed = True
@@ -97,6 +98,11 @@ def presence_users():
 @app.route("/temperature")
 def get_temperature():
     return temperature
+
+@app.route("/")
+def hello_world():
+    mqttclient.sendMssg("sergioiottest", "Hellowrld")
+    return "hello world"
 
 # Booking rooms API route
 @app.route("/rooms", methods=["GET"])
