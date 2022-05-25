@@ -57,7 +57,19 @@ export default function Rooms() {
     }, []);
 
     useEffect(() => {
-        // const iuserInterval = setInterval(() => {
+        fetch("/temperature").then(
+            res => res.json()
+        ).then(
+            temperature => {
+                setTemperatureR1(temperature["room1"])
+                setTemperatureR2(temperature["room2"])
+                setTemperatureR3(temperature["room3"])
+            }
+        )
+    }, []);
+
+    useEffect(() => {
+        const iuserInterval = setInterval(() => {
             fetch("/temperature").then(
                 res => res.json()
             ).then(
@@ -67,7 +79,7 @@ export default function Rooms() {
                     setTemperatureR3(temperature["room3"])
                 }
             )
-        // }, 2000);
+        }, 10000);
     }, []);
 
     useEffect(() => {

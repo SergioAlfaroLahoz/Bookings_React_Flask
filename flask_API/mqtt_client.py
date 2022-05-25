@@ -15,7 +15,10 @@ port = configMQTTFile["port"]
 # client_id     = "PCSergio2"
 user_name = configMQTTFile["user_name"]
 password = configMQTTFile["password"]
-base_topic = configMQTTFile["base_topic"]
+
+temperatureR1 = "22"
+temperatureR2 = "22"
+temperatureR3 = "22"
 
 def on_connect (client, userdata, flags, rc):
     """ Callback called when connection/reconnection is detected """
@@ -24,7 +27,7 @@ def on_connect (client, userdata, flags, rc):
     # With Paho, always subscribe at on_connect (if you want to
     # subscribe) to ensure you resubscribe if connection is
     # lost.
-    client.subscribe("sergioiottest/#")
+    client.subscribe("server")
 
     if rc == 0:
         client.connected_flag = True
@@ -35,10 +38,14 @@ def on_connect (client, userdata, flags, rc):
     # handle error here
     sys.exit(-1)
 
-
 def on_message(client, userdata, msg):
     """ Callback called for every PUBLISH received """
-    print ("%s => %s" % (msg.topi, str(msg.payload)))
+    print ("%s => %s" % (msg.topic, str(msg.payload)))
+    if(msg.topic=="server"):
+        global temperatureR1
+        temperatureR1 = str(msg.payload.decode("utf-8"))
+        print(temperatureR1)
+        
 
 class MQTTClient():
 
@@ -56,11 +63,14 @@ class MQTTClient():
         while not self.client.connected_flag:           #wait in loop
             self.client.loop()
             time.sleep (1)
+        self.client.loop_start()
 
-    def sendMssg(self, subtopic, message):
-        # topic = base_topic + subtopic
-        topic = subtopic
+
+    def sendMssg(self, topic, message):
         ret = self.client.publish(topic, message)
         self.client.loop()
 
         print ("Publish operation finished with ret=%s" % ret)
+
+    def updateTemperatures(self):
+        return temperatureR1, temperatureR2, temperatureR3

@@ -35,7 +35,6 @@ else:
         'bookings': []
     }
 
-
 rooms = {
     "room1": "available",
     "room2": "available",
@@ -56,6 +55,7 @@ temperature = {
 
 
 def check_bookings():
+    temperature['room1'], temperature['room2'], temperature['room3'] =  mqttclient.updateTemperatures()
     rooms['room1'] = "available"
     rooms['room2'] = "available"
     rooms['room3'] = "available"
@@ -74,8 +74,6 @@ def check_bookings():
             bookedRoom = book["room"]
             rooms[bookedRoom] = "booked"
             users[bookedRoom] = book['user']
-            #TODO send user and room via MQTT
-            mqttclient.sendMssg("/room1", bookedRoom)
         if (JSONdbDateEnd<now):
             JSONdb['bookings'].pop(count)
             changed = True
@@ -83,8 +81,14 @@ def check_bookings():
     if changed:
         with open('db.json', 'w') as outfile:
             json.dump(JSONdb, outfile) 
- 
 
+    # Update room devices
+    for room in rooms:
+        mqttclient.sendMssg(room, rooms[room])
+    for user in users:
+        topic = user + "/user"
+        mqttclient.sendMssg(topic, users[user])
+ 
 
 @app.route("/now")
 def available_rooms():
@@ -101,7 +105,7 @@ def get_temperature():
 
 @app.route("/")
 def hello_world():
-    mqttclient.sendMssg("sergioiottest", "Hellowrld")
+    mqttclient.sendMssg("room1", "Hellowrld")
     return "hello world"
 
 # Booking rooms API route
