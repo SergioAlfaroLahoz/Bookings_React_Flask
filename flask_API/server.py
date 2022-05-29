@@ -17,9 +17,7 @@ app = Flask(__name__)
 cors = CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
 
-mqttclient = mqtt_client.MQTTClient("FlaskServer1", clean_session=True)
-
-# mqttclient2 = mqtt_client.MQTTClient("FlaskServer2", clean_session=True)
+mqttclient = mqtt_client.MQTTClient("FlaskServer", clean_session=True)
 
 # Load DB from file
 if(os.path.exists('db.json')):
@@ -177,10 +175,6 @@ def add_articles():
                        
     with open('db.json', 'w') as outfile:
         json.dump(JSONdb, outfile)  
-
-    # if(mssg!=''):
-    #     mqttclient.sendMssg("/input", mssg)
-        # mqttclient2.sendMssg("/input", "Message from 2nd client")
 
     return "OK"
 

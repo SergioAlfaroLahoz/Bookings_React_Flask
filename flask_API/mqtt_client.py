@@ -27,7 +27,9 @@ def on_connect (client, userdata, flags, rc):
     # With Paho, always subscribe at on_connect (if you want to
     # subscribe) to ensure you resubscribe if connection is
     # lost.
-    client.subscribe("server")
+    client.subscribe("server/room1")
+    client.subscribe("server/room2")
+    client.subscribe("server/room3")
 
     if rc == 0:
         client.connected_flag = True
@@ -41,10 +43,18 @@ def on_connect (client, userdata, flags, rc):
 def on_message(client, userdata, msg):
     """ Callback called for every PUBLISH received """
     print ("%s => %s" % (msg.topic, str(msg.payload)))
-    if(msg.topic=="server"):
+    if(msg.topic=="server/room1"):
         global temperatureR1
         temperatureR1 = str(msg.payload.decode("utf-8"))
         print(temperatureR1)
+    elif(msg.topic=="server/room2"):
+        global temperatureR2
+        temperatureR2 = str(msg.payload.decode("utf-8"))
+        print(temperatureR2)
+    elif(msg.topic=="server/room3"):
+        global temperatureR3
+        temperatureR3 = str(msg.payload.decode("utf-8"))
+        print(temperatureR3)
         
 
 class MQTTClient():
