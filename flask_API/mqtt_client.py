@@ -11,8 +11,6 @@ with open('mqtt_config.yaml') as file:
 
 host = configMQTTFile["host"]
 port = configMQTTFile["port"]
-# clean_session = True
-# client_id     = "PCSergio2"
 user_name = configMQTTFile["user_name"]
 password = configMQTTFile["password"]
 
@@ -70,7 +68,7 @@ class MQTTClient():
         # connect using standard unsecure MQTT with keepalive to 60
         self.client.connect (host, port, keepalive = 60)
         self.client.connected_flag = False
-        while not self.client.connected_flag:           #wait in loop
+        while not self.client.connected_flag:       
             self.client.loop()
             time.sleep (1)
         self.client.loop_start()
